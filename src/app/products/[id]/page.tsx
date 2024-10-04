@@ -1,30 +1,127 @@
-import { getData } from "@/app/helpers";
+import { paymentImage } from "@/assets";
 import Container from "@/components/Container";
-import ProductImages from "@/components/ProductImages";
+import { Metadata } from "next";
+import Image from "next/image";
 import React from "react";
-import { ProductType } from "../../../../type";
+import { FaRegEye } from "react-icons/fa";
+import { MdStar } from "react-icons/md";
+import { getData } from "../../helpers";
+import ProductImage from "@/components/cart/ProductImage";
+import PriceTag from "@/components/cart/Pricetag";
+import PriceFormat from "@/components/PriceFormat";
+import AddToCartButton from "@/components/AddToCartButton";
+
+export const metadata: Metadata = {
+  title: "Product page | Your shopping center",
+  description: "An amazon clone application for education purpose",
+};
+
 interface Props {
-  params: {
+  searchParams: {
     id: string;
   };
 }
-
-const SingleProductPage = async ({ params }: Props) => {
-  const { id } = params;
-  const endpoint = `https://dummyjson.com/products/${id}`;
-  const product: ProductType = await getData(endpoint);
+export default async function SingleProductPage({ searchParams }: Props) {
+  // find single product using searchParams by called id
+  const { id } = searchParams;
+  // product ar id take endpoint a set kora
+  const endpoint = `https://dummyjson.com/products/${id} `;
+  const product = await getData(endpoint);
+  // console.log(product);
 
   return (
-    <Container className="py-5 flex flex-col md:flex-row items-start justify-between gap-x-10">
-      <ProductImages images={product?.images} />
-      <div className="w-full md:w-1/2">
-        <p className="text-sm capitalize font-medium tracking-wide">
-          {product?.category}
-        </p>
-        <h1 className="text-2xl font-bold font-bodyFont">{product?.title}</h1>
+    <Container className="py-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-10">
+        {/* image */}
+        <div>
+          <ProductImage product={product} />
+        </div>
+        {/* product details  */}
+        <div className="flex flex-col gap-4">
+          <h2 className="text-3xl font-bold">{product?.title}</h2>
+          <div className="flex items-center justify-between">
+            <PriceTag
+              regularPrice={product?.price + product?.discountPercentage / 100}
+              className="text-xl"
+              discountedPrice={
+                product?.price - product?.discountPercentage / 100
+              }
+            />
+            <div className="flex items-center gap-1">
+              <div className="text-base text-lightText flex items-center">
+                {Array?.from({ length: 5 })?.map((_, index) => {
+                  const filled = index + 1 <= Math.floor(product?.rating);
+                  const halfFilled =
+                    index + 1 > Math.floor(product?.rating) &&
+                    index < Math.ceil(product?.rating);
+
+                  return (
+                    <MdStar
+                      key={index}
+                      className={`${
+                        filled
+                          ? "text-amazonOrangeDark"
+                          : halfFilled
+                          ? "text-amazonYellowDark"
+                          : "text-lightText"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+              <p className="text-base font-semibold">{`(${product?.rating?.toFixed(
+                1
+              )} reviews)`}</p>
+            </div>
+          </div>
+          <p className="flex items-center">
+            <FaRegEye className="mr-1" />{" "}
+            <span className="font-semibold mr-1">250+</span> peoples are viewing
+            this right now
+          </p>
+          <p>
+            You are saving{" "}
+            <span className="text-base font-semibold text-green-500">
+              <PriceFormat amount={product?.discountPercentage / 100} />
+            </span>{" "}
+            upon purchase
+          </p>
+          <div>
+            <p className="text-sm tracking-wide">{product?.description}</p>
+            <p className="text-base">{product?.warrantyInformation}</p>
+          </div>
+          <p>
+            Brand: <span className="font-medium">{product?.brand}</span>
+          </p>
+          <p>
+            Category:{" "}
+            <span className="font-medium capitalize">{product?.category}</span>
+          </p>
+          <p>
+            Tags:{" "}
+            {product?.tags?.map((item, index) => (
+              <span key={index} className="font-medium capitalize">
+                {item}
+                {index < product?.tags?.length - 1 && ", "}
+              </span>
+            ))}
+          </p>
+
+          <AddToCartButton
+            product={product}
+            className=" rounded-md uppercase font-semibold"
+          />
+
+          <div className="bg-[#f7f7f7] p-5 rounded-md flex flex-col items-center justify-center gap-2">
+            <Image
+              src={paymentImage}
+              alt="payment"
+              className="w-auto object-cover"
+            />
+            <p className="font-semibold">Guaranteed safe & secure checkout</p>
+          </div>
+        </div>
       </div>
     </Container>
   );
-};
-
-export default SingleProductPage;
+}

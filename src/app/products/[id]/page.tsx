@@ -10,6 +10,7 @@ import ProductImage from "@/components/cart/ProductImage";
 import PriceTag from "@/components/cart/Pricetag";
 import PriceFormat from "@/components/PriceFormat";
 import AddToCartButton from "@/components/AddToCartButton";
+import { ProductType } from "../../../../type";
 
 export const metadata: Metadata = {
   title: "Product page | Your shopping center",
@@ -99,7 +100,7 @@ export default async function SingleProductPage({ searchParams }: Props) {
           </p>
           <p>
             Tags:{" "}
-            {product?.tags?.map((item, index) => (
+            {product?.tags?.map((item:string, index:number) => (
               <span key={index} className="font-medium capitalize">
                 {item}
                 {index < product?.tags?.length - 1 && ", "}

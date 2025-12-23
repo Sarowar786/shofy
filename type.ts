@@ -37,5 +37,6 @@ export interface StateType {
   shopy: {
     cart: ProductType[];
     userInfo: any;
+    favoriteProduct: ProductType[];
   };
 }

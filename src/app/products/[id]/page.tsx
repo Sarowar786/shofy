@@ -61,10 +61,10 @@ export default async function SingleProductPage({ searchParams }: Props) {
                       key={index}
                       className={`${
                         filled
-                          ? "text-amazonOrangeDark"
+                          ? "text-orange-600"
                           : halfFilled
-                          ? "text-amazonYellowDark"
-                          : "text-lightText"
+                          ? "text-orange-500"
+                          : "text-orange-300"
                       }`}
                     />
                   );
@@ -122,6 +122,38 @@ export default async function SingleProductPage({ searchParams }: Props) {
             <p className="font-semibold">Guaranteed safe & secure checkout</p>
           </div>
         </div>
+        {/* review section  */}
+        <div className="bg-cartBg gap-5 md:flex  md:col-span-2 p-5">
+        {product?.reviews?.map((item:any, i:number) => (
+          <div key={i} className="bg-white p-5 border border-black rounded-md">
+            <p className="font-bold">{item.comment}</p>
+            <p className="font-semibold">{item.reviewerName}</p>
+            <p>{item.reviewerEmail}</p>
+            {/* rating */}
+            <div className="text-base text-lightText flex items-center">
+                {Array?.from({ length: 5 })?.map((_, index) => {
+                  const filled = index + 1 <= Math.floor(item?.rating);
+                  const halfFilled =
+                    index + 1 > Math.floor(item?.rating) &&
+                    index < Math.ceil(item?.rating);
+
+                  return (
+                    <MdStar
+                      key={index}
+                      className={`${
+                        filled
+                          ? "text-orange-400"
+                          : halfFilled
+                          ? "text-orange-200"
+                          : " text-black"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+          </div>
+        ))}
+      </div>
       </div>
     </Container>
   );

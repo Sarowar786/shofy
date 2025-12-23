@@ -28,15 +28,15 @@ export default async function SingleProductPage({ searchParams }: Props) {
   // product ar id take endpoint a set kora
   const endpoint = `https://dummyjson.com/products/${id} `;
   const product = await getData(endpoint);
-  // console.log(product);
+  // console.log("product title")
 
   return (
     <Container className="py-10">
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-10">
         {/* image */}
-        {/* <div>
+        <div>
           <ProductImage product={product} />
-        </div> */}
+        </div>
         {/* product details  */}
         <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-bold">{product?.title}</h2>

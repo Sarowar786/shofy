@@ -1,10 +1,10 @@
-export const getData = async (endpoint: string) => {
-  const response = await fetch(endpoint, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await response.json();
-  return data;
-};
+export async function getData(url: string) {
+  try {
+    const res = await fetch(url, { cache: "no-store" }); // ✅ SSR safe
+    if (!res.ok) throw new Error("Failed to fetch data");
+    return res.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return null;
+  }
+}

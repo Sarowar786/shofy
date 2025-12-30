@@ -36,10 +36,7 @@ const ProductCard = ({ product }: Props) => {
   return (
     <div className="border border-borderColor hover:shadow-lg hover:shadow-black/30 duration-300 rounded-md group overflow-hidden">
       <Link
-        href={{
-          pathname: `/products/${product?.id}`,
-          query: { id: product?.id },
-        }}
+        href={`/products/${product?.id}`}
         className=" relative"
       >
         <Image
